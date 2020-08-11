@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RallyDakar.Dominio.Entidades
 {
@@ -21,10 +22,18 @@ namespace RallyDakar.Dominio.Entidades
             if (equipe == null)
                 return;
 
-            if (string.IsNullOrEmpty(equipe.Nome))
+            if (!equipe.Validado())
+                return;
+
+            if (Equipes.Any(e => e.Id == equipe.Id))
                 return;
 
             Equipes.Add(equipe);
+        }
+
+        public Equipe ObterPorId(int id)
+        {
+            return Equipes.FirstOrDefault(e => e.Id == id);
         }
     }
 }
