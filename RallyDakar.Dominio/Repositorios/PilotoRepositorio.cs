@@ -28,9 +28,37 @@ namespace RallyDakar.Dominio.Repositorios
             return _rallyDbContexto.Pilotos.ToList();
         }
 
-        public IEnumerable<Piloto> ObterPorNome(string nome)
+        public Piloto ObterPorNome(string nome)
         {
-            return _rallyDbContexto.Pilotos.Where(p => p.Nome == nome).ToList();
+            return _rallyDbContexto.Pilotos.FirstOrDefault(p => p.Nome == nome);
+        }
+
+        public Piloto Obter(int pilotoId)
+        {
+            return _rallyDbContexto.Pilotos.FirstOrDefault(p => p.Id == pilotoId);
+        }
+
+        public bool Existe(int pilotoId)
+        {
+            return _rallyDbContexto.Pilotos.Any(p => p.Id == pilotoId);
+        }
+
+        public bool Existe(Piloto piloto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Atualizar(Piloto piloto)
+        {
+            _rallyDbContexto.Attach(piloto);
+            _rallyDbContexto.Entry(piloto).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _rallyDbContexto.SaveChanges();
+        }
+
+        public void Deletar(Piloto piloto)
+        {
+            _rallyDbContexto.Pilotos.Remove(piloto);
+            _rallyDbContexto.SaveChanges();
         }
     }
 }

@@ -31,7 +31,8 @@ namespace RallyDakar.API
             services.AddDbContext<RallyDbContexto>(opt => opt.UseInMemoryDatabase("RallyDB"),
                 ServiceLifetime.Scoped,
                 ServiceLifetime.Scoped);
-            services.AddControllers();
+            services.AddControllers()
+                    .AddNewtonsoftJson();
             services.AddScoped<IPilotoRepositorio, PilotoRepositorio>();
         }
 
