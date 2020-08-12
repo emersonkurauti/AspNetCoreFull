@@ -9,6 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Dominio", "0 - Dominio"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RallyDakar.Dominio.Teste", "RallyDakar.Dominio.Test\RallyDakar.Dominio.Teste.csproj", "{C119D7CD-F264-4DB0-8503-101F898DB462}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - WEB", "1 - WEB", "{EBD731BD-C2EE-4F68-B7EF-08D0F52B6401}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1 - API", "1.1 - API", "{EBC7EEC9-8B84-4434-AC03-0B942E93FC4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RallyDakar.API", "RallyDakar.API\RallyDakar.API.csproj", "{2E74D375-9B36-46FC-8992-DC03236EB676}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +29,10 @@ Global
 		{C119D7CD-F264-4DB0-8503-101F898DB462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C119D7CD-F264-4DB0-8503-101F898DB462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C119D7CD-F264-4DB0-8503-101F898DB462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E74D375-9B36-46FC-8992-DC03236EB676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E74D375-9B36-46FC-8992-DC03236EB676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E74D375-9B36-46FC-8992-DC03236EB676}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E74D375-9B36-46FC-8992-DC03236EB676}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +40,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BBDC9B2A-3061-418D-B64F-BCEE106136D1} = {62C88846-A94E-4066-8BE1-E9E43B670002}
 		{C119D7CD-F264-4DB0-8503-101F898DB462} = {62C88846-A94E-4066-8BE1-E9E43B670002}
+		{EBC7EEC9-8B84-4434-AC03-0B942E93FC4E} = {EBD731BD-C2EE-4F68-B7EF-08D0F52B6401}
+		{2E74D375-9B36-46FC-8992-DC03236EB676} = {EBC7EEC9-8B84-4434-AC03-0B942E93FC4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BAB8EFD-76D1-4C9D-9C33-4C99F039A145}
