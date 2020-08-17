@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using RallyDakar.API.Modelo;
 using RallyDakar.Dominio.Entidades;
 using RallyDakar.Dominio.Interfaces;
 using System;
@@ -13,11 +15,13 @@ namespace RallyDakar.API.Controllers
     [Route("api/pilotos")]
     public class PilotoController : ControllerBase
     {
-        IPilotoRepositorio _pilotoRepositorio;
+        private readonly IPilotoRepositorio _pilotoRepositorio;
+        private readonly IMapper _mapper;
 
-        public PilotoController(IPilotoRepositorio pilotoRepositorio)
+        public PilotoController(IPilotoRepositorio pilotoRepositorio, IMapper mapper)
         {
             _pilotoRepositorio = pilotoRepositorio;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,15 +37,19 @@ namespace RallyDakar.API.Controllers
         }*/
 
         [HttpPost]
-        public IActionResult Adicionar([FromBody]Piloto piloto)
+        public IActionResult Adicionar([FromBody]PilotoModelo pilotoModelo)
         {
             try
             {
+                var piloto = _mapper.Map<Piloto>(pilotoModelo);
+
                 if (_pilotoRepositorio.Existe(piloto.Id))
                     return StatusCode(409, "Piloto já existe com o mesmo ID.");
 
                 _pilotoRepositorio.Adicionar(piloto);
-                return CreatedAtRoute("Obter", new { id = piloto.Id}, piloto);
+
+                var pilotoModeloRetorno = _mapper.Map<PilotoModelo>(piloto);
+                return CreatedAtRoute("Obter", new { id = piloto.Id}, pilotoModeloRetorno);
             }
             catch(Exception ex)
             {
@@ -56,10 +64,12 @@ namespace RallyDakar.API.Controllers
             try
             {
                 var piloto = _pilotoRepositorio.Obter(id);
-                if (piloto == null)
+                if (piloto == null) 
                     return NotFound();
 
-                return Ok(piloto);
+                var pilotoModelo = _mapper.Map<PilotoModelo>(piloto);
+
+                return Ok(pilotoModelo);
             }
             catch (Exception ex)
             {
@@ -69,12 +79,14 @@ namespace RallyDakar.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Alterar([FromBody]Piloto piloto)
+        public IActionResult Alterar([FromBody]PilotoModelo pilotoModelo)
         {
             try
             {
-                if (!_pilotoRepositorio.Existe(piloto.Id))
+                if (!_pilotoRepositorio.Existe(pilotoModelo.Id))
                     return NotFound();
+
+                var piloto = _mapper.Map<Piloto>(pilotoModelo);
 
                 _pilotoRepositorio.Atualizar(piloto);
                 return NoContent();
@@ -87,7 +99,7 @@ namespace RallyDakar.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult AlterarParcial(int id, [FromBody] JsonPatchDocument<Piloto> patchPiloto)
+        public IActionResult AlterarParcial(int id, [FromBody] JsonPatchDocument<PilotoModelo> patchPilotoModelo)
         {
             try
             {
@@ -95,8 +107,12 @@ namespace RallyDakar.API.Controllers
                     return NotFound();
 
                 var piloto = _pilotoRepositorio.Obter(id);
+                var pilotoModelo = _mapper.Map<PilotoModelo>(piloto);
 
-                patchPiloto.ApplyTo(piloto);
+                patchPilotoModelo.ApplyTo(pilotoModelo);
+
+                piloto = _mapper.Map(pilotoModelo, piloto);
+
                 _pilotoRepositorio.Atualizar(piloto);
 
                 return NoContent();
@@ -126,6 +142,13 @@ namespace RallyDakar.API.Controllers
                 //_logger.info(ex.ToString());
                 return StatusCode(500, "Ocorreu um erro interno, favor entrar em contato com o administrador.");
             }
+        }
+
+        [HttpOptions]
+        public IActionResult ListarOperacoesPermitidas()
+        {
+            Response.Headers.Add("Allow", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+            return Ok();
         }
     }
 }
