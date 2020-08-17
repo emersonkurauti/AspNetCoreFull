@@ -35,6 +35,8 @@ namespace RallyDakar.API
             services.AddControllers()
                     .AddNewtonsoftJson();
             services.AddScoped<IPilotoRepositorio, PilotoRepositorio>();
+            services.AddScoped<ITelemetriaRepositorio, TelemetriaRepositorio>();
+            services.AddScoped<IEquipeRepositorio, EquipeRepositorio>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

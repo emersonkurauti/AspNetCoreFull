@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RallyDakar.API.Modelo;
 using RallyDakar.Dominio.Entidades;
 using RallyDakar.Dominio.Interfaces;
@@ -17,11 +18,13 @@ namespace RallyDakar.API.Controllers
     {
         private readonly IPilotoRepositorio _pilotoRepositorio;
         private readonly IMapper _mapper;
+        private readonly ILogger<PilotoController> _logger;
 
-        public PilotoController(IPilotoRepositorio pilotoRepositorio, IMapper mapper)
+        public PilotoController(IPilotoRepositorio pilotoRepositorio, IMapper mapper, ILogger<PilotoController> logger)
         {
             _pilotoRepositorio = pilotoRepositorio;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -41,19 +44,27 @@ namespace RallyDakar.API.Controllers
         {
             try
             {
+                _logger.LogInformation("Mapeando PilotoModelo");
                 var piloto = _mapper.Map<Piloto>(pilotoModelo);
 
+                _logger.LogInformation($"Verificando piloto existe ID: {piloto.Id}");
                 if (_pilotoRepositorio.Existe(piloto.Id))
+                {
+                    _logger.LogInformation($"Piloto já existe com o mesmo ID: {piloto.Id}");
                     return StatusCode(409, "Piloto já existe com o mesmo ID.");
+                }
 
+                _logger.LogInformation("Adicionando piloto");
                 _pilotoRepositorio.Adicionar(piloto);
 
+                _logger.LogInformation("Mapeando piolo");
                 var pilotoModeloRetorno = _mapper.Map<PilotoModelo>(piloto);
+                _logger.LogInformation("Criando rota");
                 return CreatedAtRoute("Obter", new { id = piloto.Id}, pilotoModeloRetorno);
             }
             catch(Exception ex)
             {
-                //_logger.info(ex.ToString());
+                _logger.LogError(ex.ToString());
                 return StatusCode(500, "Ocorreu um erro interno, favor entrar em contato com o administrador.");
             }
         }
@@ -73,7 +84,7 @@ namespace RallyDakar.API.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.info(ex.ToString());
+                _logger.LogInformation(ex.ToString());
                 return StatusCode(500, "Ocorreu um erro interno, favor entrar em contato com o administrador.");
             }
         }
@@ -93,7 +104,7 @@ namespace RallyDakar.API.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.info(ex.ToString());
+                _logger.LogInformation(ex.ToString());
                 return StatusCode(500, "Ocorreu um erro interno, favor entrar em contato com o administrador.");
             }
         }
@@ -119,7 +130,7 @@ namespace RallyDakar.API.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.info(ex.ToString());
+                _logger.LogInformation(ex.ToString());
                 return StatusCode(500, "Ocorreu um erro interno, favor entrar em contato com o administrador.");
             }
         }
@@ -139,7 +150,7 @@ namespace RallyDakar.API.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.info(ex.ToString());
+                _logger.LogInformation(ex.ToString());
                 return StatusCode(500, "Ocorreu um erro interno, favor entrar em contato com o administrador.");
             }
         }

@@ -1,13 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace RallyDakar.Dominio.Entidades
+namespace RallyDakar.API.Modelo
 {
-    public class Telemetria
+    public class TelemetriaModelo
     {
+        [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Identificador da equipe é obrigatória.")]
         public int EquipeId { get; set; }
 
+        [Required]
         public DateTime Data { get; set; }
+        [Required]
         public TimeSpan Hora { get; set; }
 
         public decimal Latitude { get; set; }
